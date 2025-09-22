@@ -1,7 +1,7 @@
 import { LinkedList } from "../project-linked-lists/linked-list.js";
 
 const HashMap = function (loadFac) {
-  let loadFactor = loadFac;
+  const loadFactor = loadFac;
   let capacity = 37;
   let hashArray = new Array(capacity).fill(null);
   let numberOfStoredKeys = 0;
@@ -105,6 +105,11 @@ const HashMap = function (loadFac) {
     return numberOfStoredKeys;
   }
 
+  const clear = function() {
+    numberOfStoredKeys = 0;
+    hashArray = new Array(capacity);
+  }
+
   /** Checks if the hashmap contains the given key */
   const has = function(key) {
     return (get(key)) ? true : false;
@@ -115,7 +120,7 @@ const HashMap = function (loadFac) {
     return hashArray;
   };
 
-  return { set, has, get, length, remove, getHashArray };
+  return { set, has, get, length, remove, getHashArray, clear };
 };
 
 // Testing
@@ -142,5 +147,5 @@ for (let i = 0, array = test.getHashArray(); i < array.length; i++) {
     console.log(array[i].head);
   }
 }
-// console.log(test.getHashArray());
+test.clear();
 console.log(test.length());
