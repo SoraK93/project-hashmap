@@ -1,8 +1,8 @@
 import { LinkedList } from "../project-linked-lists/linked-list.js";
 
-const HashMap = function (loadFac) {
+export const HashMap = function (loadFac) {
   const loadFactor = loadFac;
-  let capacity = 37;
+  let capacity = 12;
   let hashArray = new Array(capacity).fill(null);
   let numberOfStoredKeys = 0;
 
@@ -26,7 +26,7 @@ const HashMap = function (loadFac) {
    */
   const set = function (key, value) {
     // Increase array size of 80% full
-    if (Math.floor(numberOfStoredKeys / capacity) >= loadFactor) {
+    if (Math.floor(getFilledBucket() / capacity) >= loadFactor) {
       hashArray = hashArray.concat(new Array(arraySize));
       capacity = hashArray.length;
     }
@@ -105,27 +105,64 @@ const HashMap = function (loadFac) {
     return numberOfStoredKeys;
   };
 
+  /** Get number of buckets that has data stored in it */
+  const getFilledBucket = function () {
+    let filledBucket;
+    for (let i = 0, array = getHashArray(); i < array.length; i++) {
+      if (array[i] !== null) {
+        let curr = array[i];
+        if (curr.size >= 1) {
+          filledBucket++;
+        }
+      }
+    }
+    return filledBucket;
+  };
+
   /** Clear all the data from the hashmap */
   const clear = function () {
     numberOfStoredKeys = 0;
     hashArray = new Array(capacity);
   };
 
-  /** Get all the keys stored in the hashmap */
-  const keys = function () {
-    const keysArray = [];
+  /** Get all the object stored in the hashmap */
+  const getObjects = function () {
+    const keysValueArray = [];
 
-    for (let i = 0, array = test.getHashArray(); i < array.length; i++) {
+    for (let i = 0, array = getHashArray(); i < array.length; i++) {
       if (array[i] !== null) {
         let curr = array[i].head;
         while (curr !== null) {
-          keysArray.push(curr.value.key);
+          keysValueArray.push(curr.value);
           curr = curr.nextNode;
         }
       }
     }
 
+    return keysValueArray;
+  };
+
+  /** Get all the keys stored in the hashmap */
+  const keys = function () {
+    const keysArray = getObjects().map((ele) => ele.key);
     return keysArray;
+  };
+
+  /** Get all the value stored in the hashmap */
+  const values = function () {
+    const valuesArray = getObjects().map((ele) => ele.value);
+    return valuesArray;
+  };
+
+  /** Get all the key, value pairs in nested array format */
+  const entries = function () {
+    const keysArray = keys();
+    const valuesArray = values();
+    const entriesArray = keysArray.map((ele, index) => [
+      ele,
+      valuesArray[index],
+    ]);
+    return entriesArray;
   };
 
   /** Checks if the hashmap contains the given key */
@@ -138,27 +175,18 @@ const HashMap = function (loadFac) {
     return hashArray;
   };
 
-  return { set, has, get, length, remove, getHashArray, clear, keys };
+  return {
+    hash,
+    set,
+    has,
+    get,
+    length,
+    remove,
+    getHashArray,
+    clear,
+    keys,
+    values,
+    entries,
+    getFilledBucket
+  };
 };
-
-// Testing
-const test = HashMap(0.75); // or HashMap() if using a factory
-
-test.set("apple", "red");
-test.set("banana", "yellow");
-test.set("carrot", "orange");
-test.set("dog", "brown");
-test.set("elephant", "gray"); // collision at index 24
-test.set("frog", "green");
-test.set("frog", "green1");
-test.set("grape", "purple");
-test.set("hat", "black");
-test.set("ice cream", "white");
-test.set("jacket", "blue");
-test.set("kite", "pink");
-test.set("lion", "golden"); // collision at index 24
-
-// console.log(test.remove("elephant"), "removed");
-console.log(test.keys());
-test.clear();
-console.log(test.length());
