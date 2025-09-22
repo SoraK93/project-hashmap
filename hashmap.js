@@ -39,7 +39,7 @@ const HashMap = function (loadFac) {
       list.prepend(hashObject);
       hashArray[hashIndex] = list;
       numberOfStoredKeys++;
-      return hashArray;
+      return hashArray; 
     }
 
     // checking if key already present in the bucket
