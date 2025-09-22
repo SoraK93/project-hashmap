@@ -142,6 +142,5 @@ for (let i = 0, array = test.getHashArray(); i < array.length; i++) {
     console.log(array[i].head);
   }
 }
-
 // console.log(test.getHashArray());
 console.log(test.length());
