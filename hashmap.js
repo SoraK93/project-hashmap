@@ -39,7 +39,7 @@ const HashMap = function (loadFac) {
       list.prepend(hashObject);
       hashArray[hashIndex] = list;
       numberOfStoredKeys++;
-      return hashArray; 
+      return hashArray;
     }
 
     // checking if key already present in the bucket
@@ -74,15 +74,15 @@ const HashMap = function (loadFac) {
   /** Remove a object by using given key from the hashmap
    * @key {String}
    */
-  const remove = function(key) {
+  const remove = function (key) {
     let hashIndex = hash(key);
     if (!hashArray[hashIndex]) {
-      throw new Error("No data found. Please check given key and try again.")
+      throw new Error("No data found. Please check given key and try again.");
     }
 
     let hashLinkedList = hashArray[hashIndex];
     let currNode = hashLinkedList.head;
-    
+
     if (hashLinkedList.size === 1 && currNode.value.key === key) {
       numberOfStoredKeys--;
       return hashLinkedList.pop();
@@ -98,29 +98,47 @@ const HashMap = function (loadFac) {
     currNode.nextNode = currNode.nextNode.nextNode;
     numberOfStoredKeys--;
     return removedNode;
-  }
+  };
 
   /** Returns total number of keys stored inside the hashmap */
-  const length = function() {
+  const length = function () {
     return numberOfStoredKeys;
-  }
+  };
 
-  const clear = function() {
+  /** Clear all the data from the hashmap */
+  const clear = function () {
     numberOfStoredKeys = 0;
     hashArray = new Array(capacity);
-  }
+  };
+
+  /** Get all the keys stored in the hashmap */
+  const keys = function () {
+    const keysArray = [];
+
+    for (let i = 0, array = test.getHashArray(); i < array.length; i++) {
+      if (array[i] !== null) {
+        let curr = array[i].head;
+        while (curr !== null) {
+          keysArray.push(curr.value.key);
+          curr = curr.nextNode;
+        }
+      }
+    }
+
+    return keysArray;
+  };
 
   /** Checks if the hashmap contains the given key */
-  const has = function(key) {
-    return (get(key)) ? true : false;
-  }
+  const has = function (key) {
+    return get(key) ? true : false;
+  };
 
   /** retrive hashmap array */
   const getHashArray = function () {
     return hashArray;
   };
 
-  return { set, has, get, length, remove, getHashArray, clear };
+  return { set, has, get, length, remove, getHashArray, clear, keys };
 };
 
 // Testing
@@ -140,12 +158,7 @@ test.set("jacket", "blue");
 test.set("kite", "pink");
 test.set("lion", "golden"); // collision at index 24
 
-console.log(test.remove("elephant"), "removed")
-
-for (let i = 0, array = test.getHashArray(); i < array.length; i++) {
-  if (array[i] !== null) {
-    console.log(array[i].head);
-  }
-}
+// console.log(test.remove("elephant"), "removed");
+console.log(test.keys());
 test.clear();
 console.log(test.length());
